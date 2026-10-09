@@ -30,6 +30,15 @@ const samplePitches = [
     duration: "1:41",
     link: "/discover",
   },
+  {
+    _id: "solarpulse",
+    title: "SolarPulse",
+    founderName: "Vikram Das",
+    category: "CleanTech",
+    askText: "₹80L for 5%",
+    duration: "1:15",
+    link: "/discover",
+  },
 ];
 
 const inr = (n) => {
@@ -61,7 +70,7 @@ const Landing = () => {
     const fetchTopPitches = async () => {
       try {
         const response = await API.get("/pitches", {
-          params: { sort: "top", limit: 3 },
+          params: { sort: "top", limit: 4 },
         });
         const items = response.data?.data?.items || [];
         if (items.length > 0) {
@@ -99,7 +108,7 @@ const Landing = () => {
 
   const displayPitches =
     featuredPitches.length > 0
-      ? featuredPitches.slice(0, 3).map((p) => ({
+      ? featuredPitches.slice(0, 4).map((p) => ({
           _id: p._id,
           title: p.title,
           founderName: p.owner?.fullName || "Founder",
@@ -302,7 +311,7 @@ const Landing = () => {
               <Link
                 to={p.link}
                 className="thumb"
-                style={{ "--h": "180px", display: "flex" }}
+                style={{ display: "flex", width: "100%" }}
               >
                 {p.thumbnailUrl ? (
                   <img
