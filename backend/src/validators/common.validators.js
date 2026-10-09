@@ -11,4 +11,7 @@ export const paginationSchema = z.object({
 
 export const emailSchema = z.string().email().toLowerCase().trim();
 
-export const urlSchema = z.string().url().optional();
+export const urlSchema = z.preprocess(
+  (val) => (val === "" || val === null ? undefined : val),
+  z.string().url().optional()
+);
