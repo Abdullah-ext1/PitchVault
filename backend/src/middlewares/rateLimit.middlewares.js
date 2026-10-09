@@ -45,7 +45,8 @@ export const loginLimiter = rateLimit({
 
 export const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 5,
+  max: process.env.NODE_ENV === "development" ? 100 : 5,
+  skipFailedRequests: true,
   keyGenerator: (req) => {
     return req.user?._id?.toString() || req.ip;
   },

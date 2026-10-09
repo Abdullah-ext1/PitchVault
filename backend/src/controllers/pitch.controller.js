@@ -16,7 +16,15 @@ export const createPitch = asyncHandler(async (req, res) => {
   let uploadedVideo = null;
 
   try {
-    uploadedVideo = await uploadVideo(videoFile.path);
+    try {
+      uploadedVideo = await uploadVideo(videoFile.path);
+    } catch (uploadError) {
+      console.error("Cloudinary upload failed:", uploadError);
+      throw new ApiError(
+        500,
+        `Video upload failed: ${uploadError.message || "Cloudinary error"}`
+      );
+    }
 
     if (!uploadedVideo) {
       throw new ApiError(500, "Failed to upload video to Cloudinary");

@@ -3,8 +3,7 @@
  * Loads environment variables, connects to MongoDB, and starts the Express server
  */
 
-import dotenv from "dotenv";
-dotenv.config({ path: "./.env" });
+import "dotenv/config";
 
 import connectDB from "./db/db-connection.js";
 import { app } from "./app.js";

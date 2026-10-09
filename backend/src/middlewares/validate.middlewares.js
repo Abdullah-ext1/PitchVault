@@ -15,6 +15,16 @@ export const validate = (schema, source = "body") => {
       
       next();
     } catch (error) {
+      if (req.file && req.file.path) {
+        import("fs").then((fs) => {
+          if (fs.existsSync(req.file.path)) {
+            try {
+              fs.unlinkSync(req.file.path);
+            } catch (e) {}
+          }
+        });
+      }
+
       if (error instanceof z.ZodError) {
         const errors = error.errors.map((err) => ({
           field: err.path.join("."),
