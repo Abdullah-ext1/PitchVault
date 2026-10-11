@@ -10,7 +10,10 @@ export const globalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.path === "/health",
+  skip: (req) =>
+    req.method === "OPTIONS" ||
+    req.path === "/health" ||
+    req.path === "/api/v1/health",
 });
 
 export const authLimiter = rateLimit({
@@ -23,6 +26,7 @@ export const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.method === "OPTIONS",
 });
 
 export const loginLimiter = rateLimit({
@@ -32,6 +36,7 @@ export const loginLimiter = rateLimit({
     return `${req.ip}-${req.body.email || ""}`;
   },
   skip: (req, res) => {
+    if (req.method === "OPTIONS") return true;
     return res.statusCode < 400;
   },
   message: {
@@ -57,6 +62,7 @@ export const uploadLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.method === "OPTIONS",
 });
 
 export const voteLimiter = rateLimit({
@@ -72,6 +78,7 @@ export const voteLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.method === "OPTIONS",
 });
 
 export const introLimiter = rateLimit({
@@ -87,4 +94,5 @@ export const introLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.method === "OPTIONS",
 });

@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const rawBaseURL =
+  import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+const baseURL = rawBaseURL.trim().replace(/\/+$/, "");
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1",
+  baseURL,
   withCredentials: true,
 });
 
@@ -24,14 +28,17 @@ API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = originalRequest?.url || "";
+    const isAuthRoute =
+      requestUrl.includes("/users/login") ||
+      requestUrl.includes("/users/register") ||
+      requestUrl.includes("/users/refresh-token") ||
+      requestUrl.includes("/users/current-user");
 
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry &&
-      originalRequest.url !== "/users/login" &&
-      originalRequest.url !== "/users/register" &&
-      originalRequest.url !== "/users/refresh-token" &&
-      originalRequest.url !== "/users/current-user"
+      !originalRequest?._retry &&
+      !isAuthRoute
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {

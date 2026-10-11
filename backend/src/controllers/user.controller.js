@@ -22,10 +22,17 @@ const generateTokens = async (userId) => {
   return { accessToken, refreshToken };
 };
 
-const cookieOptions = {
+const isProd = process.env.NODE_ENV === "production";
+
+const sharedCookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+  path: "/",
+};
+
+const cookieOptions = {
+  ...sharedCookieOptions,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -106,16 +113,10 @@ export const logoutUser = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  const clearCookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  };
-
   return res
     .status(200)
-    .clearCookie("accessToken", clearCookieOptions)
-    .clearCookie("refreshToken", clearCookieOptions)
+    .clearCookie("accessToken", sharedCookieOptions)
+    .clearCookie("refreshToken", sharedCookieOptions)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
