@@ -2,6 +2,8 @@
 
 Pitch Vault is a platform where startup founders publish short video pitches and connect with investors. Founders can upload pitch videos, specify their fundraising targets, and manage their listings. Investors can discover startups, filter by industry category and stage, and vote on pitches.
 
+# LIVE DEMO: pitchvault-frontend.vercel.app
+
 ## Features
 
 - Role-based authentication with distinct, immutable roles for founders and investors
